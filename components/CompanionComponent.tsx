@@ -15,7 +15,6 @@ enum CallStatus {
 }
 
 const CompanionComponent = ({
-  companionId,
   subject,
   topic,
   name,
@@ -46,7 +45,6 @@ const CompanionComponent = ({
 
     const onCallEnd = () => {
       setCallStatus(CallStatus.FINISHED);
-      addToSessionHistory(companionId);
     };
 
     const onMessage = (message: Message) => {
@@ -103,7 +101,7 @@ const CompanionComponent = ({
   };
 
   return (
-    <section className="flex flex-col h-[70vh]">
+    <section className="flex flex-col h-[100vh]">
       <section className="flex gap-8 max-sm:flex-col">
         <div className="companion-section">
           <div
@@ -176,7 +174,9 @@ const CompanionComponent = ({
           <button
             className={cn(
               "rounded-lg py-2 cursor-pointer transition-colors w-full text-white",
-              callStatus === CallStatus.ACTIVE ? "bg-red-700" : "bg-primary bg-black",
+              callStatus === CallStatus.ACTIVE
+                ? "bg-red-700"
+                : "bg-primary bg-black",
               callStatus === CallStatus.CONNECTING && "animate-pulse"
             )}
             onClick={
@@ -192,28 +192,29 @@ const CompanionComponent = ({
         </div>
       </section>
 
-      <section className="transcript">
-        <div className="transcript-message no-scrollbar">
-          {messages.map((message, index) => {
-            if (message.role === "assistant") {
-              return (
-                <p key={index} className="max-sm:text-sm text-black">
-                  {name.split(" ")[0].replace("/[.,]/g, ", "")}:{" "}
-                  {message.content}
-                </p>
-              );
-            } else {
-              return (
-                <p key={index} className="text-primary text-black max-sm:text-sm">
-                  {userName}: {message.content}
-                </p>
-              );
-            }
-          })}
-        </div>
+    <section className="transcript">
+  <div className="transcript-message no-scrollbar">
+    {messages.map((message, index) => {
+      if (message.role === "assistant") {
+        console.log(message.content); // move console.log outside JSX
+        return (
+          <p key={index} className="max-sm:text-sm">
+            {name.split(" ")[0].replace(/[.,]/g, ",")}: {message.content}
+          </p>
+        );
+      } else {
+        return (
+          <p key={index} className="text-black max-sm:text-sm">
+            {userName}: {message.content}
+          </p>
+        );
+      }
+    })}
+  </div>
 
-        <div className="transcript-fade" />
-      </section>
+  <div className="transcript-fade" />
+</section>
+
     </section>
   );
 };
