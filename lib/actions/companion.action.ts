@@ -146,6 +146,7 @@ export const addBookmark = async (companionId: string, path: string) => {
     companion_id: companionId,
     user_id: userId,
   });
+  
   if (error) {
     throw new Error(error.message);
   }
